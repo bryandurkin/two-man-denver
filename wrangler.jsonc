@@ -8,6 +8,7 @@
 		{
 			"binding": "DB",
 			"database_name": "two-man-denver",
+			"database_id": "7b2f6d73-f417-4f9d-b248-64b38a67cd0c",
 		},
 	],
 	"r2_buckets": [
