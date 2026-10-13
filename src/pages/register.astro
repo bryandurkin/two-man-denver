@@ -1,0 +1,88 @@
+---
+import Site from "../layouts/Site.astro";
+import PriceCard from "../components/PriceCard.astro";
+import Icon from "../components/Icon.astro";
+import { getCamp, telHref } from "../utils/camp";
+
+const { camp, edit } = await getCamp();
+const regUrl = camp.registration_url;
+
+const steps = [
+	{
+		title: "Fill out the form",
+		text: regUrl ? "Open the online registration form and enter your details." : "Online registration opens soon. Call or email to save your spot now.",
+	},
+	{
+		title: "Pay your camp fee",
+		text: `${camp.early_price} by ${camp.early_deadline}, ${camp.regular_price} after.${camp.payment_info ? " " + camp.payment_info : ""}`,
+	},
+	{
+		title: "Pack your gear",
+		text: `Bring all umpire gear and be ready for live-game assignments ${camp.dates}.`,
+	},
+];
+---
+
+<Site title="Register & Contact" description={`Register for the ${camp.title}, ${camp.dates}. Early bird ${camp.early_price} by ${camp.early_deadline}.`}>
+	<section class="hero page-hero">
+		<div class="wrap">
+			<p class="eyebrow">{camp.dates} &bull; {camp.city}</p>
+			<h1 class="h-hero">Register &amp; Contact</h1>
+			<p class="slogan red">Earn your opportunity.</p>
+		</div>
+	</section>
+
+	<section class="section" id="register">
+		<div class="wrap grid-split">
+			<div class="stack">
+				<div class="tm-tab"><h2>How to register</h2></div>
+				<ol class="steps">
+					{
+						steps.map((step, i) => (
+							<li>
+								<span class="steps__n" aria-hidden="true">{i + 1}</span>
+								<div>
+									<h3>{step.title}</h3>
+									<p>{step.text}</p>
+								</div>
+							</li>
+						))
+					}
+				</ol>
+				{
+					regUrl ? (
+						<a class="tm-btn" style="align-self: flex-start" href={regUrl} target="_blank" rel="noopener" {...edit.registration_url}>
+							Open registration form
+						</a>
+					) : (
+						<a class="tm-btn" style="align-self: flex-start" href={telHref(camp.phone)}>
+							Call to register
+						</a>
+					)
+				}
+			</div>
+			<PriceCard camp={camp} edit={edit} button={false} />
+		</div>
+	</section>
+
+	<section class="section section--raised" id="contact">
+		<div class="wrap stack" style="max-width: 760px">
+			<div class="tm-tab"><h2>Questions? Reach {camp.contact_name.split(" ")[0]}</h2></div>
+			<p class="muted" style="margin: 0">Call or email {camp.contact_name} about registration, gear, or anything else about camp.</p>
+			<a class="contact-card" href={telHref(camp.phone)}>
+				<Icon name="phone" size={28} />
+				<span>
+					<span class="contact-card__label">Call</span>
+					<span class="contact-card__value" {...edit.phone}>{camp.phone}</span>
+				</span>
+			</a>
+			<a class="contact-card" href={`mailto:${camp.email}`}>
+				<Icon name="mail" size={28} />
+				<span style="min-width: 0">
+					<span class="contact-card__label">Email</span>
+					<span class="contact-card__value" {...edit.email}>{camp.email}</span>
+				</span>
+			</a>
+		</div>
+	</section>
+</Site>

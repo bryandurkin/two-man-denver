@@ -1,0 +1,108 @@
+---
+import { getEmDashCollection } from "emdash";
+import Site from "../layouts/Site.astro";
+import PriceCard from "../components/PriceCard.astro";
+import { getCamp, telHref } from "../utils/camp";
+
+const { camp, edit } = await getCamp();
+const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
+	orderBy: { published_at: "desc" },
+	limit: 3,
+});
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+---
+
+<Site title={camp.title} description={`${camp.dates} at ${camp.venue}, ${camp.city}. ${camp.intro}`}>
+	<section class="hero">
+		<div class="wrap">
+			<p class="eyebrow">9.01c Officials Group &amp; 850 Officials present</p>
+			<h1 class="hero__title">
+				<span class="hero__big">Two-Man</span>
+				<span class="hero__sub">Instructional Camp</span>
+			</h1>
+			<div class="tm-ribbon"><span {...edit.dates}>{camp.dates}</span></div>
+			<p class="caps">
+				<span {...edit.venue}>{camp.venue}</span> &bull; <span {...edit.city}>{camp.city}</span>
+			</p>
+			<p class="slogan">Elevate your game.<br /><span class="red">Earn your opportunity.</span></p>
+			<div class="btn-row" style="justify-content: center">
+				<a class="tm-btn" href="/register">Register now</a>
+				<a class="tm-btn tm-btn--secondary" href="/camp-details">See camp details</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="intro">
+		<div class="wrap">
+			<p class="intro__lines">
+				Four days. Real scenarios. Expert instruction.<br />
+				Build your confidence. Sharpen your skills. <span class="red">Get seen.</span>
+			</p>
+			<p class="lead" {...edit.intro}>{camp.intro}</p>
+		</div>
+	</section>
+	<div class="slash">
+		<span class="slash__rule" aria-hidden="true"></span>
+		<p>Multiple college conferences represented &amp; college coordinators in attendance</p>
+		<span class="slash__rule" aria-hidden="true"></span>
+	</div>
+
+	<section class="section section--raised">
+		<div class="wrap grid-cards">
+			<article class="card">
+				<p class="eyebrow">Camp focus</p>
+				<h2 class="h-card">Two-man mechanics, live</h2>
+				<p class="muted">Positioning, handling situations, game management and rule interpretation, tested in live games with feedback.</p>
+				<a class="card__link" href="/camp-details">See everything we cover</a>
+			</article>
+			<article class="card">
+				<p class="eyebrow">Instructors</p>
+				<h2 class="h-card" {...edit.instructors_headline}>{camp.instructors_headline}</h2>
+				<p class="muted">Learn from the people who evaluate and assign. {camp.instructors_note}</p>
+				<a class="card__link" href="/camp-details#instructors">Meet the staff</a>
+			</article>
+			<article class="card">
+				<p class="eyebrow">Come ready to work</p>
+				<h2 class="h-card">Bring all umpire gear</h2>
+				<p class="muted" {...edit.gear_note}>{camp.gear_note}</p>
+				<a class="card__link" href="/camp-details#come-ready">What to expect</a>
+			</article>
+		</div>
+	</section>
+
+	<section class="section">
+		<div class="wrap grid-split grid-split--center">
+			<div class="stack">
+				<div class="tm-tab"><p>Lock in early bird</p></div>
+				<h2 class="h-section">Register by {camp.early_deadline} for {camp.early_price}</h2>
+				<p class="muted" style="margin: 0; max-width: 520px">
+					After {camp.early_deadline}, camp is {camp.regular_price}. Register online, or call {camp.contact_name} with questions first.
+				</p>
+				<a class="card__link" href={telHref(camp.phone)} style="font-size: 20px">Call {camp.phone}</a>
+			</div>
+			<PriceCard camp={camp} edit={edit} />
+		</div>
+	</section>
+
+	{
+		posts.length > 0 && (
+			<section class="section section--raised">
+				<div class="wrap stack">
+					<div class="tm-tab"><h2>From the blog</h2></div>
+					<div class="post-list">
+						{posts.map((post) => (
+							<a class="card post-card" href={`/blog/${post.id}`}>
+								<p class="eyebrow">
+									{post.data.publishedAt?.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+								</p>
+								<h3 class="h-card">{post.data.title}</h3>
+								{post.data.excerpt && <p class="muted">{post.data.excerpt}</p>}
+							</a>
+						))}
+					</div>
+					<a class="card__link" href="/blog">All posts</a>
+				</div>
+			</section>
+		)
+	}
+</Site>

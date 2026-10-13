@@ -1,0 +1,21 @@
+---
+import type { CampInfo } from "../utils/camp";
+
+interface Props {
+	camp: CampInfo;
+	edit?: Record<string, Record<string, string>>;
+	/** Show the register button inside the card */
+	button?: boolean;
+}
+
+const { camp, edit = {}, button = true } = Astro.props;
+---
+
+<div class="tm-price">
+	<span class="tm-price__tag">Early bird pricing</span>
+	<p class="tm-price__by" {...edit.early_deadline}>By {camp.early_deadline}</p>
+	<p class="tm-price__amount" {...edit.early_price}>{camp.early_price}</p>
+	<p class="tm-price__after">After {camp.early_deadline}</p>
+	<p class="tm-price__amount tm-price__amount--late" {...edit.regular_price}>{camp.regular_price}</p>
+	{button && <a class="tm-btn tm-btn--block" href="/register">Register now</a>}
+</div>

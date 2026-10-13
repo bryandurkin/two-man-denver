@@ -1,0 +1,178 @@
+{
+	"$schema": "https://emdashcms.com/seed.schema.json",
+	"version": "1",
+	"meta": {
+		"name": "Two-Man Instructional Camp",
+		"description": "Website for the Two-Man Instructional Camp run by 9.01c Officials Group and 850 Officials",
+		"author": "9.01c Officials Group"
+	},
+	"settings": {
+		"title": "Two-Man Instructional Camp",
+		"tagline": "Elevate your game. Earn your opportunity."
+	},
+	"collections": [
+		{
+			"slug": "camp",
+			"label": "Camp Info",
+			"labelSingular": "Camp Info",
+			"supports": ["drafts", "revisions"],
+			"fields": [
+				{ "slug": "title", "label": "Camp name", "type": "string", "required": true },
+				{ "slug": "dates", "label": "Dates (shown on the red ribbon)", "type": "string", "required": true },
+				{ "slug": "venue", "label": "Venue", "type": "string" },
+				{ "slug": "city", "label": "City and state", "type": "string" },
+				{ "slug": "intro", "label": "Intro paragraph", "type": "text" },
+				{ "slug": "early_price", "label": "Early bird price", "type": "string" },
+				{ "slug": "early_deadline", "label": "Early bird deadline", "type": "string" },
+				{ "slug": "regular_price", "label": "Regular price", "type": "string" },
+				{ "slug": "registration_url", "label": "Registration link", "type": "url" },
+				{ "slug": "payment_info", "label": "How campers pay", "type": "text" },
+				{ "slug": "phone", "label": "Contact phone", "type": "string" },
+				{ "slug": "email", "label": "Contact email", "type": "string" },
+				{ "slug": "contact_name", "label": "Contact name", "type": "string" },
+				{
+					"slug": "focus_items",
+					"label": "Camp focus checklist",
+					"type": "repeater",
+					"validation": { "subFields": [{ "slug": "label", "label": "Item", "type": "string", "required": true }] }
+				},
+				{
+					"slug": "schedule",
+					"label": "Daily schedule",
+					"type": "repeater",
+					"validation": {
+						"subFields": [
+							{ "slug": "date", "label": "Date", "type": "string", "required": true },
+							{ "slug": "name", "label": "Day label", "type": "string", "required": true },
+							{ "slug": "details", "label": "What happens", "type": "text" }
+						]
+					}
+				},
+				{ "slug": "instructors_headline", "label": "Instructors headline", "type": "string" },
+				{ "slug": "instructors_note", "label": "Instructors note", "type": "string" },
+				{ "slug": "instructor_names", "label": "Instructor names and titles", "type": "text" },
+				{ "slug": "gear_note", "label": "Come ready to work", "type": "text" },
+				{ "slug": "location_notes", "label": "Directions, lodging and travel notes", "type": "text" },
+				{ "slug": "map_url", "label": "Map link (Google Maps)", "type": "url" }
+			]
+		},
+		{
+			"slug": "posts",
+			"label": "Blog Posts",
+			"labelSingular": "Blog Post",
+			"urlPattern": "/blog/{slug}",
+			"supports": ["drafts", "revisions", "preview", "scheduling", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "featured_image", "label": "Featured Image", "type": "image" },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" }
+			]
+		},
+		{
+			"slug": "pages",
+			"label": "Extra Pages",
+			"labelSingular": "Extra Page",
+			"urlPattern": "/pages/{slug}",
+			"supports": ["drafts", "revisions", "preview", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true }
+			]
+		}
+	],
+	"taxonomies": [
+		{
+			"name": "category",
+			"label": "Categories",
+			"labelSingular": "Category",
+			"hierarchical": true,
+			"collections": ["posts"],
+			"terms": [
+				{ "slug": "camp-news", "label": "Camp News" },
+				{ "slug": "mechanics", "label": "Mechanics" }
+			]
+		}
+	],
+	"bylines": [
+		{ "id": "byline-901c", "slug": "901c-officials-group", "displayName": "9.01c Officials Group" }
+	],
+	"menus": [
+		{
+			"name": "primary",
+			"label": "Primary Navigation",
+			"items": [
+				{ "type": "custom", "label": "Home", "url": "/" },
+				{ "type": "custom", "label": "Camp Details", "url": "/camp-details" },
+				{ "type": "custom", "label": "Blog", "url": "/blog" },
+				{ "type": "custom", "label": "Register & Contact", "url": "/register" }
+			]
+		}
+	],
+	"content": {
+		"camp": [
+			{
+				"id": "camp-main",
+				"slug": "two-man-camp",
+				"status": "published",
+				"data": {
+					"title": "Two-Man Instructional Camp",
+					"dates": "December 10-13",
+					"venue": "Publix Sports Park",
+					"city": "Panama City Beach, Florida",
+					"intro": "Join top officials, college coaches, and experienced instructors for an intensive two-man mechanics camp designed to take your game to the next level.",
+					"early_price": "$150",
+					"early_deadline": "November 28, 2026",
+					"regular_price": "$175",
+					"registration_url": "",
+					"payment_info": "",
+					"phone": "850-867-9670",
+					"email": "Denver.dangerfield.9.01c@gmail.com",
+					"contact_name": "Denver Dangerfield",
+					"focus_items": [
+						{ "label": "Two-man mechanics" },
+						{ "label": "Handling situations" },
+						{ "label": "Positioning" },
+						{ "label": "Game management" },
+						{ "label": "On-field evaluations" },
+						{ "label": "Live games with feedback" },
+						{ "label": "Rule interpretation" },
+						{ "label": "Q&A with college coaches" }
+					],
+					"schedule": [
+						{ "date": "Thursday, Dec 10", "name": "Day 1", "details": "" },
+						{ "date": "Friday, Dec 11", "name": "Day 2", "details": "" },
+						{ "date": "Saturday, Dec 12", "name": "Day 3", "details": "" },
+						{ "date": "Sunday, Dec 13", "name": "Day 4", "details": "" }
+					],
+					"instructors_headline": "College supervisors & MiLB umpires",
+					"instructors_note": "College coordinators in attendance.",
+					"instructor_names": "",
+					"gear_note": "Bring all umpire gear and be prepared for live-game assignments every day of camp.",
+					"location_notes": "",
+					"map_url": ""
+				}
+			}
+		],
+		"posts": [
+			{
+				"id": "post-camp-announced",
+				"slug": "two-man-camp-december-2026",
+				"status": "published",
+				"data": {
+					"title": "Two-Man Instructional Camp: December 10-13 in Panama City Beach",
+					"excerpt": "Four days of two-man mechanics, live games with feedback, and college coordinators in attendance at Publix Sports Park.",
+					"content": [
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "The Two-Man Instructional Camp runs December 10-13 at Publix Sports Park in Panama City Beach, Florida. It is four days of real scenarios and expert instruction built around the two-man system." }] },
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Who is teaching" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Instruction comes from college supervisors and MiLB umpires, with multiple college conferences represented and college coordinators in attendance." }] },
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Early bird pricing" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Register by November 28, 2026 for $150. After that, camp is $175. Bring all umpire gear and be prepared for live-game assignments." }] }
+					]
+				},
+				"bylines": [{ "byline": "byline-901c" }],
+				"taxonomies": { "category": ["camp-news"] }
+			}
+		]
+	}
+}

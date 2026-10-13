@@ -1,0 +1,149 @@
+---
+import { getMenuWithCacheHint, getSiteSettingsWithCacheHint } from "emdash";
+import { EmDashHead, EmDashBodyStart, EmDashBodyEnd } from "emdash/ui";
+import { createPublicPageContext } from "emdash/page";
+import { getCamp, telHref } from "../utils/camp";
+import "../styles/site.css";
+
+interface Props {
+	title: string;
+	description?: string | null;
+	image?: string | null;
+	canonical?: string | null;
+	robots?: string | null;
+	type?: "website" | "article";
+	publishedTime?: string | null;
+	modifiedTime?: string | null;
+	content?: { collection: string; id: string; slug?: string | null };
+}
+
+const {
+	title,
+	description,
+	image,
+	canonical,
+	robots,
+	type = "website",
+	publishedTime,
+	modifiedTime,
+	content,
+} = Astro.props;
+
+const [settingsResult, menuResult, campResult] = await Promise.all([
+	getSiteSettingsWithCacheHint(),
+	getMenuWithCacheHint("primary"),
+	getCamp(),
+]);
+if (Astro.cache?.enabled) {
+	Astro.cache.set(settingsResult.cacheHint);
+	Astro.cache.set(menuResult.cacheHint);
+	if (campResult.cacheHint) Astro.cache.set(campResult.cacheHint);
+}
+
+const siteTitle = settingsResult.data?.title ?? "Two-Man Instructional Camp";
+const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
+const { camp } = campResult;
+
+const fallbackMenu = [
+	{ label: "Home", url: "/" },
+	{ label: "Camp Details", url: "/camp-details" },
+	{ label: "Blog", url: "/blog" },
+	{ label: "Register & Contact", url: "/register" },
+];
+const menuItems = (menuResult.data?.items?.length ? menuResult.data.items : fallbackMenu) as {
+	label: string;
+	url: string;
+	target?: string;
+}[];
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isCurrent = (url: string) => {
+	const clean = url.replace(/\/$/, "") || "/";
+	return clean === "/" ? path === "/" : path === clean || path.startsWith(clean + "/");
+};
+
+const pageCtx = createPublicPageContext({
+	Astro,
+	kind: content ? "content" : "custom",
+	pageType: type,
+	title: fullTitle,
+	pageTitle: title,
+	description,
+	canonical,
+	image,
+	content,
+	seo: { ogImage: image, robots },
+	articleMeta: { publishedTime, modifiedTime },
+	siteName: siteTitle,
+});
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{fullTitle}</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@600;700;800&family=Permanent+Marker&display=swap"
+		/>
+		<EmDashHead page={pageCtx} />
+	</head>
+	<body>
+		<EmDashBodyStart page={pageCtx} />
+		<a class="skip-link" href="#main">Skip to content</a>
+
+		<header class="site-header">
+			<div class="wrap">
+				<a href="/" class="logos" aria-label={`${camp.title} home`}>
+					<img src="/images/901c-officials-group.png" alt="9.01c Officials Group" width="164" height="128" />
+					<span class="logos__div" aria-hidden="true"></span>
+					<img src="/images/850-officials.png" alt="850 Officials" width="248" height="128" />
+				</a>
+				<nav class="nav" aria-label="Main">
+					{
+						menuItems.map((item) => (
+							<a
+								href={item.url}
+								target={item.target}
+								aria-current={isCurrent(item.url) ? "page" : undefined}
+							>
+								{item.label}
+							</a>
+						))
+					}
+					<a href="/register" class="tm-btn">Register</a>
+				</nav>
+			</div>
+		</header>
+
+		<main id="main">
+			<slot />
+		</main>
+
+		<div class="tm-contactbar">
+			<div class="wrap">
+				<strong>Register:</strong>
+				<a href={camp.registration_url || "/register"}>Online registration</a>
+				<a href={telHref(camp.phone)}>{camp.phone}</a>
+				<a href={`mailto:${camp.email}`}>{camp.email}</a>
+				<span class="muted">{camp.contact_name}</span>
+			</div>
+		</div>
+
+		<footer class="site-footer">
+			<div class="wrap">
+				<div class="logos">
+					<img src="/images/901c-officials-group.png" alt="9.01c Officials Group" width="164" height="128" />
+					<img src="/images/850-officials.png" alt="850 Officials" width="248" height="128" />
+				</div>
+				<p>{camp.title} &bull; 9.01c Officials Group &amp; 850 Officials</p>
+			</div>
+		</footer>
+
+		<EmDashBodyEnd page={pageCtx} />
+	</body>
+</html>

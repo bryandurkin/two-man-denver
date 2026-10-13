@@ -1,0 +1,36 @@
+---
+import { getEmDashEntry, getSeoMeta, decodeSlug, getSiteSettings } from "emdash";
+import { PortableText } from "emdash/ui";
+import Site from "../../layouts/Site.astro";
+
+const slug = decodeSlug(Astro.params.slug);
+if (!slug) return Astro.redirect("/404");
+
+const { entry: page, cacheHint } = await getEmDashEntry("pages", slug);
+if (!page) return Astro.redirect("/404");
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+
+const settings = await getSiteSettings();
+const seo = getSeoMeta(page, {
+	siteTitle: settings?.title ?? "Two-Man Instructional Camp",
+	siteUrl: Astro.url.origin,
+	path: Astro.url.pathname.replace(/\/$/, ""),
+});
+---
+
+<Site
+	title={page.data.title}
+	description={seo.description}
+	canonical={seo.canonical}
+	robots={seo.robots}
+	content={{ collection: "pages", id: page.data.id, slug }}
+>
+	<article class="article">
+		<div class="article__inner">
+			<h1 class="article__title" {...page.edit.title}>{page.data.title}</h1>
+			<div class="prose" {...page.edit.content}>
+				<PortableText value={page.data.content} />
+			</div>
+		</div>
+	</article>
+</Site>
