@@ -79,12 +79,11 @@ const { camp, edit } = await getCamp();
 					<p class="caps" style="font-size: 22px" {...edit.instructors_headline}>{camp.instructors_headline}</p>
 					<p class="muted" style="font-style: italic" {...edit.instructors_note}>{camp.instructors_note}</p>
 					{
-						camp.instructor_names ? (
+						camp.instructor_names && (
 							<p class="muted" style="white-space: pre-line" {...edit.instructor_names}>{camp.instructor_names}</p>
-						) : (
-							<p class="placeholder">Instructor names and bios coming soon.</p>
 						)
 					}
+					<p class="placeholder">{camp.instructor_names ? "Instructor bios coming soon." : "Instructor names and bios coming soon."}</p>
 				</div>
 			</div>
 			<div class="info-row" id="come-ready">
