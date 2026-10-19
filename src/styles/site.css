@@ -592,6 +592,26 @@ textarea:focus-visible {
 	margin: 0;
 }
 
+/* Location and directions */
+.location-address {
+	margin: 0;
+	font-size: 20px;
+	white-space: pre-line;
+	user-select: text;
+}
+.location-helper,
+.location-copy-status {
+	margin: 0;
+}
+.location-actions {
+	gap: var(--space-3);
+}
+.location-actions .tm-btn {
+	padding: 0 20px;
+}
+.location-actions [hidden] {
+	display: none;
+}
 /* Location map box */
 .map-box {
 	min-height: 220px;

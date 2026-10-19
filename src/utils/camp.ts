@@ -13,6 +13,7 @@ export interface CampInfo {
 	dates: string;
 	venue: string;
 	city: string;
+	address: string;
 	intro: string;
 	early_price: string;
 	early_deadline: string;
@@ -37,6 +38,7 @@ const DEFAULTS: CampInfo = {
 	dates: "December 10-13",
 	venue: "Publix Sports Park",
 	city: "Panama City Beach, Florida",
+	address: "50 Chip Seal Parkway\nPanama City Beach, FL 32407",
 	intro:
 		"Join top officials, college coaches, and experienced instructors for an intensive two-man mechanics camp designed to take your game to the next level.",
 	early_price: "$150",
@@ -85,6 +87,11 @@ export async function getCamp() {
 	const camp = Object.fromEntries(
 		(Object.keys(DEFAULTS) as (keyof CampInfo)[]).map((key) => [key, pick(data[key] as never, DEFAULTS[key] as never)]),
 	) as CampInfo;
+	// The confirmed address belongs to this venue. A future venue change must
+	// supply its own address instead of inheriting the Publix Sports Park address.
+	if ((camp.venue !== DEFAULTS.venue || camp.city !== DEFAULTS.city) && !data.address?.trim()) {
+		camp.address = "";
+	}
 	// The original seed has schedule rows with empty details. Fill only those
 	// matching rows, keeping any schedule entered in the CMS authoritative.
 	camp.schedule = camp.schedule.map((day) => {
@@ -99,6 +106,23 @@ export async function getCamp() {
 	// Spread these onto elements so a logged-in admin can click to edit (empty object when not available).
 	const edit = (entry?.edit ?? {}) as Record<string, Record<string, string>>;
 	return { camp, edit, cacheHint };
+}
+
+/** Standard HTTPS directions links work in map apps and on the web. */
+export function getDirections(camp: Pick<CampInfo, "venue" | "city" | "address">) {
+	const address = (camp.address || camp.city).trim().replace(/\s*\n\s*/g, ", ");
+	const destination = [camp.venue, address].filter(Boolean).join(", ");
+	const google = new URLSearchParams({ api: "1", destination, travelmode: "driving" });
+	// Keep the exact place selected in the supplied Maps link for the confirmed venue.
+	if (camp.venue === DEFAULTS.venue && camp.city === DEFAULTS.city && camp.address === DEFAULTS.address) {
+		google.set("destination_place_id", "ChIJKRpVOlKPk4gRKPyLAblqab0");
+	}
+	const apple = new URLSearchParams({ destination, mode: "driving" });
+	return {
+		address,
+		googleMaps: `https://www.google.com/maps/dir/?${google}`,
+		appleMaps: `https://maps.apple.com/directions?${apple}`,
+	};
 }
 
 /** "850-867-9670" -> "tel:+18508679670" */

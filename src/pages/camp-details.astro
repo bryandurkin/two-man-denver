@@ -2,9 +2,10 @@
 import Site from "../layouts/Site.astro";
 import PriceCard from "../components/PriceCard.astro";
 import Icon from "../components/Icon.astro";
-import { getCamp } from "../utils/camp";
+import { getCamp, getDirections } from "../utils/camp";
 
 const { camp, edit } = await getCamp();
+const directions = getDirections(camp);
 ---
 
 <Site title="Camp Details" description={`What to expect at the ${camp.title}: ${camp.dates} at ${camp.venue}, ${camp.city}.`}>
@@ -102,21 +103,34 @@ const { camp, edit } = await getCamp();
 			<div class="stack" style="gap: 20px">
 				<div class="tm-tab"><h2>Location</h2></div>
 				<h3 class="h-section" style="font-size: 40px" {...edit.venue}>{camp.venue}</h3>
-				<p class="caps muted" {...edit.city}>{camp.city}</p>
-				{
-					camp.map_url ? (
-						<a class="tm-btn tm-btn--secondary" style="align-self: flex-start" href={camp.map_url} target="_blank" rel="noopener">
-							Get directions
-						</a>
-					) : (
-						<div class="map-box">
-							<p class="placeholder" style="margin: 0">Map and directions coming soon.</p>
-						</div>
-					)
-				}
+				<p class="location-address muted" {...(camp.address ? edit.address : edit.city)}>{camp.address || camp.city}</p>
+				<p class="location-helper muted">Choose your preferred map app.</p>
+				<div class="btn-row location-actions" role="group" aria-label="Directions options">
+					<a class="tm-btn tm-btn--secondary" href={directions.googleMaps} target="_blank" rel="noopener noreferrer">Google Maps</a>
+					<a class="tm-btn tm-btn--secondary" href={directions.appleMaps} target="_blank" rel="noopener noreferrer">Apple Maps</a>
+					{camp.address && <button class="tm-btn tm-btn--secondary" type="button" data-copy-address={directions.address} hidden>Copy address</button>}
+					{camp.map_url && <a class="card__link" href={camp.map_url} target="_blank" rel="noopener noreferrer">Venue map</a>}
+				</div>
+				<p class="location-copy-status muted" role="status" aria-live="polite" data-copy-status></p>
 				{camp.location_notes && <p class="muted" style="margin: 0; white-space: pre-line" {...edit.location_notes}>{camp.location_notes}</p>}
 			</div>
 			<PriceCard camp={camp} edit={edit} />
 		</div>
 	</section>
+
+	<script>
+		const copyButton = document.querySelector<HTMLButtonElement>("[data-copy-address]");
+		const copyStatus = document.querySelector<HTMLElement>("[data-copy-status]");
+		if (copyButton && copyStatus && navigator.clipboard?.writeText) {
+			copyButton.hidden = false;
+			copyButton.addEventListener("click", async () => {
+				try {
+					await navigator.clipboard.writeText(copyButton.dataset.copyAddress || "");
+					copyStatus.textContent = "Address copied.";
+				} catch {
+					copyStatus.textContent = "Select and copy the address above.";
+				}
+			});
+		}
+	</script>
 </Site>
