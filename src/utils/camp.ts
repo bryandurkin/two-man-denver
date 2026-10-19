@@ -117,11 +117,13 @@ export function getDirections(camp: Pick<CampInfo, "venue" | "city" | "address">
 	if (camp.venue === DEFAULTS.venue && camp.city === DEFAULTS.city && camp.address === DEFAULTS.address) {
 		google.set("destination_place_id", "ChIJKRpVOlKPk4gRKPyLAblqab0");
 	}
-	const apple = new URLSearchParams({ destination, mode: "driving" });
+	// Apple Maps is more reliable when the destination is encoded directly
+	// in the unified /directions URL instead of serialized with URLSearchParams.
+	const appleDestination = encodeURIComponent(address);
 	return {
 		address,
 		googleMaps: `https://www.google.com/maps/dir/?${google}`,
-		appleMaps: `https://maps.apple.com/directions?${apple}`,
+		appleMaps: `https://maps.apple.com/directions?destination=${appleDestination}&mode=driving`,
 	};
 }
 
