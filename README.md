@@ -23,7 +23,7 @@ Log in at `/_emdash/admin`.
 
 - Registration link (the link behind the flyer's QR code)
 - How campers pay
-- Daily schedule, instructor names, map link, lodging and travel notes
+- Instructor names and bios, map link, lodging and travel notes
 - Original logo files (the current ones are cropped from the flyer)
 
 ## Development

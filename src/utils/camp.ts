@@ -58,15 +58,15 @@ const DEFAULTS: CampInfo = {
 		{ label: "Q&A with college coaches" },
 	],
 	schedule: [
-		{ date: "Thursday, Dec 10", name: "Day 1" },
-		{ date: "Friday, Dec 11", name: "Day 2" },
-		{ date: "Saturday, Dec 12", name: "Day 3" },
-		{ date: "Sunday, Dec 13", name: "Day 4" },
+		{ date: "Thursday, Dec 10", name: "Day 1", details: "6:00 PM–9:00 PM\nClassroom session" },
+		{ date: "Friday, Dec 11", name: "Day 2", details: "8:00 AM–4:00 PM" },
+		{ date: "Saturday, Dec 12", name: "Day 3", details: "8:00 AM–4:00 PM" },
+		{ date: "Sunday, Dec 13", name: "Day 4", details: "8:00 AM–Noon" },
 	],
 	instructors_headline: "College supervisors & MiLB umpires",
 	instructors_note: "College coordinators in attendance.",
 	instructor_names: "",
-	gear_note: "Bring all umpire gear and be prepared for live-game assignments every day of camp.",
+	gear_note: "Bring all umpire gear and be prepared for live-game assignments during camp.",
 	location_notes: "",
 	map_url: "",
 };
@@ -85,6 +85,17 @@ export async function getCamp() {
 	const camp = Object.fromEntries(
 		(Object.keys(DEFAULTS) as (keyof CampInfo)[]).map((key) => [key, pick(data[key] as never, DEFAULTS[key] as never)]),
 	) as CampInfo;
+	// The original seed has schedule rows with empty details. Fill only those
+	// matching rows, keeping any schedule entered in the CMS authoritative.
+	camp.schedule = camp.schedule.map((day) => {
+		const fallback = DEFAULTS.schedule.find((item) => item.date === day.date && item.name === day.name);
+		return day.details?.trim() || !fallback ? day : { ...day, details: fallback.details };
+	});
+	// Retire the original seed wording now that Thursday is a classroom session.
+	// Any other gear note entered in the CMS is preserved.
+	if (camp.gear_note === "Bring all umpire gear and be prepared for live-game assignments every day of camp.") {
+		camp.gear_note = DEFAULTS.gear_note;
+	}
 	// Spread these onto elements so a logged-in admin can click to edit (empty object when not available).
 	const edit = (entry?.edit ?? {}) as Record<string, Record<string, string>>;
 	return { camp, edit, cacheHint };
