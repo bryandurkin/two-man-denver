@@ -3,6 +3,7 @@ import Site from "../layouts/Site.astro";
 import PriceCard from "../components/PriceCard.astro";
 import Icon from "../components/Icon.astro";
 import { getCamp, getDirections } from "../utils/camp";
+import { clinicians } from "../data/clinicians";
 
 const { camp, edit } = await getCamp();
 const directions = getDirections(camp);
@@ -71,22 +72,53 @@ const directions = getDirections(camp);
 		</div>
 	</section>
 
-	<section class="section section--raised">
-		<div class="wrap grid-split">
-			<div class="info-row" id="instructors">
-				<Icon name="mask" size={56} />
-				<div class="info-row__body">
-					<div class="tm-tab"><h2>Instructors</h2></div>
-					<p class="caps" style="font-size: 22px" {...edit.instructors_headline}>{camp.instructors_headline}</p>
-					<p class="muted" style="font-style: italic" {...edit.instructors_note}>{camp.instructors_note}</p>
-					{
-						camp.instructor_names && (
-							<p class="muted" style="white-space: pre-line" {...edit.instructor_names}>{camp.instructor_names}</p>
-						)
-					}
-					<p class="placeholder">{camp.instructor_names ? "Instructor bios coming soon." : "Instructor names and bios coming soon."}</p>
-				</div>
+	<section class="section section--raised" id="instructors">
+		<div class="wrap stack">
+			<div class="tm-tab"><h2>Meet the clinicians</h2></div>
+			<p class="caps" {...edit.instructors_headline}>{camp.instructors_headline}</p>
+			<p class="muted" style="margin: 0" {...edit.instructors_note}>{camp.instructors_note}</p>
+			<div class="clinician-list">
+				{
+					clinicians.map((clinician) => (
+						<article class="clinician-card">
+							<div class="clinician-card__photo">
+								<img
+									src={clinician.image}
+									alt={clinician.imageAlt}
+									width="260"
+									height="249"
+									loading="lazy"
+									decoding="async"
+								/>
+							</div>
+							<div class="clinician-card__body">
+								<p class="eyebrow">Camp clinician</p>
+								<h3 class="h-section">{clinician.name}</h3>
+								<p class="clinician-card__roles">{clinician.roles.join(" · ")}</p>
+								<p class="muted">{clinician.overview}</p>
+								<div class="clinician-card__experience">
+									{clinician.experience.map((item) => (
+										<div class="clinician-card__stat">
+											<strong>{item.value}</strong>
+											<span>{item.label}</span>
+										</div>
+									))}
+								</div>
+								<blockquote class="clinician-card__quote">“{clinician.quote}”</blockquote>
+							</div>
+						</article>
+					))
+				}
 			</div>
+			{
+				camp.instructor_names && (
+					<div class="clinician-pending">
+						<p class="eyebrow">Additional clinicians</p>
+						<p class="muted" style="white-space: pre-line; margin: 0" {...edit.instructor_names}>{camp.instructor_names}</p>
+						<p class="placeholder">More instructor bios coming soon.</p>
+					</div>
+				)
+			}
 			<div class="info-row" id="come-ready">
 				<Icon name="mask" size={56} />
 				<div class="info-row__body">

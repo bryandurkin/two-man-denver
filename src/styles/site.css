@@ -401,6 +401,106 @@ textarea:focus-visible {
 	margin: 0;
 }
 
+
+/* Camp clinicians: reusable card layout for confirmed instructor profiles */
+.clinician-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-6);
+}
+.clinician-card {
+	display: grid;
+	grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+	align-items: start;
+	gap: var(--space-8);
+	padding: var(--space-8);
+	border: 1px solid var(--border);
+	border-top: 4px solid var(--brand-red);
+	background: var(--surface);
+}
+.clinician-card__photo img {
+	width: 100%;
+	height: auto;
+	aspect-ratio: 260 / 249;
+	object-fit: cover;
+	border: 1px solid var(--border);
+}
+.clinician-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-4);
+	min-width: 0;
+}
+.clinician-card__body > * {
+	margin: 0;
+}
+.clinician-card__roles {
+	font-family: var(--font-condensed);
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1.4;
+}
+.clinician-card__experience {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: var(--space-3);
+}
+.clinician-card__stat {
+	padding: 12px 14px;
+	border: 1px solid var(--brand-red);
+	background: var(--surface-raised);
+	text-align: center;
+}
+.clinician-card__stat strong {
+	display: block;
+	font-family: var(--font-condensed);
+	font-size: 30px;
+	font-weight: 800;
+	line-height: 1.1;
+	color: var(--ink);
+}
+.clinician-card__stat span {
+	display: block;
+	margin-top: 4px;
+	font-family: var(--font-condensed);
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1.3;
+	text-transform: uppercase;
+	color: var(--ink-muted);
+}
+.clinician-card__quote {
+	border-left: 3px solid var(--brand-red);
+	padding-left: var(--space-4);
+	font-style: italic;
+	color: var(--ink-muted);
+}
+.clinician-pending {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--space-2);
+}
+.clinician-pending > * {
+	margin: 0;
+}
+@media (max-width: 780px) {
+	.clinician-card {
+		grid-template-columns: 1fr;
+	}
+	.clinician-card__photo {
+		max-width: 260px;
+	}
+}
+@media (max-width: 480px) {
+	.clinician-card {
+		padding: var(--space-4);
+	}
+	.clinician-card__experience {
+		grid-template-columns: 1fr;
+	}
+}
+
 /* Price card */
 .tm-price {
 	width: 100%;

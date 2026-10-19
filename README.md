@@ -25,11 +25,15 @@ The Location section displays the postal address with Google Maps, Apple Maps, a
 
 The confirmed Publix Sports Park address is available through `src/utils/camp.ts` defaults. New installations receive the optional `address` text field from the seed. On the existing CMS, add a Camp Info text field with slug `address` to make the street address editable in the admin; changing `seed.json` does not migrate the live schema. A CMS venue change will not inherit the original venue's address or Google place ID.
 
+## Instructor profiles
+
+Confirmed clinician profiles are stored in `src/data/clinicians.ts`; portrait images live in `public/images/`. The Camp Info CMS `instructor_names` field still lists additional announced names until their profiles are supplied.
+
 ## Still needed from the camp
 
 - Registration link (the link behind the flyer's QR code)
 - How campers pay
-- Instructor names and bios, lodging and travel notes
+- Remaining instructor names and bios, lodging and travel notes
 - Original logo files (the current ones are cropped from the flyer)
 
 ## Development
