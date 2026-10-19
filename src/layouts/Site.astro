@@ -115,7 +115,7 @@ const pageCtx = createPublicPageContext({
 							</a>
 						))
 					}
-					<a href="/register" class="tm-btn">Register</a>
+					<a href={camp.registration_url} target="_blank" rel="noopener noreferrer" class="tm-btn">Register</a>
 				</nav>
 			</div>
 		</header>
@@ -127,7 +127,8 @@ const pageCtx = createPublicPageContext({
 		<div class="tm-contactbar">
 			<div class="wrap">
 				<strong>Register:</strong>
-				<a href={camp.registration_url || "/register"}>Online registration</a>
+				<a href={camp.registration_url} target="_blank" rel="noopener noreferrer">Online registration</a>
+				<span class="muted">Questions:</span>
 				<a href={telHref(camp.phone)}>{camp.phone}</a>
 				<a href={`mailto:${camp.email}`}>{camp.email}</a>
 				<span class="muted">{camp.contact_name}</span>

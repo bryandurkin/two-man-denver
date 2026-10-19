@@ -10,7 +10,7 @@ const regUrl = camp.registration_url;
 const steps = [
 	{
 		title: "Fill out the form",
-		text: regUrl ? "Open the online registration form and enter your details." : "Online registration opens soon. Call or email to save your spot now.",
+		text: "Open the online registration form and enter your details.",
 	},
 	{
 		title: "Pay your camp fee",
@@ -49,17 +49,9 @@ const steps = [
 						))
 					}
 				</ol>
-				{
-					regUrl ? (
-						<a class="tm-btn" style="align-self: flex-start" href={regUrl} target="_blank" rel="noopener" {...edit.registration_url}>
-							Open registration form
-						</a>
-					) : (
-						<a class="tm-btn" style="align-self: flex-start" href={telHref(camp.phone)}>
-							Call to register
-						</a>
-					)
-				}
+				<a class="tm-btn" style="align-self: flex-start" href={regUrl} target="_blank" rel="noopener noreferrer" {...edit.registration_url}>
+					Register online
+				</a>
 			</div>
 			<PriceCard camp={camp} edit={edit} button={false} />
 		</div>
@@ -68,7 +60,7 @@ const steps = [
 	<section class="section section--raised" id="contact">
 		<div class="wrap stack" style="max-width: 760px">
 			<div class="tm-tab"><h2>Questions? Reach {camp.contact_name.split(" ")[0]}</h2></div>
-			<p class="muted" style="margin: 0">Call or email {camp.contact_name} about registration, gear, or anything else about camp.</p>
+			<p class="muted" style="margin: 0">Registration is online only. Call or email {camp.contact_name} with questions about registration, gear, or camp.</p>
 			<a class="contact-card" href={telHref(camp.phone)}>
 				<Icon name="phone" size={28} />
 				<span>

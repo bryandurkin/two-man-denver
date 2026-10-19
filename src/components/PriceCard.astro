@@ -17,5 +17,5 @@ const { camp, edit = {}, button = true } = Astro.props;
 	<p class="tm-price__amount" {...edit.early_price}>{camp.early_price}</p>
 	<p class="tm-price__after">After {camp.early_deadline}</p>
 	<p class="tm-price__amount tm-price__amount--late" {...edit.regular_price}>{camp.regular_price}</p>
-	{button && <a class="tm-btn tm-btn--block" href="/register">Register now</a>}
+	{button && <a class="tm-btn tm-btn--block" href={camp.registration_url} target="_blank" rel="noopener noreferrer">Register now</a>}
 </div>
