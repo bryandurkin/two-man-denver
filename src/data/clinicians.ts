@@ -37,7 +37,7 @@ export const clinicians: Clinician[] = [
 			"Triple-A Crew Chief",
 			"2026 World Baseball Classic",
 		],
-		image: "/images/david-arrieta.webp",
+		image: "/images/david-arrieta-portrait.webp",
 		imageAlt: "Portrait of David Arrieta",
 		overview:
 			"David has officiated at the highest levels of baseball, from the Venezuelan Winter League and Minor League Baseball through the Caribbean Series and World Baseball Classic. He brings extensive experience in two-man mechanics, positioning, and game management to the camp.",
