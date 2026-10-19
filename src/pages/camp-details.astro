@@ -104,7 +104,14 @@ const directions = getDirections(camp);
 										</div>
 									))}
 								</div>
-								<blockquote class="clinician-card__quote">“{clinician.quote}”</blockquote>
+								{
+									clinician.details && (
+										<ul class="clinician-card__details">
+											{clinician.details.map((detail) => <li>{detail}</li>)}
+										</ul>
+									)
+								}
+								{clinician.quote && <blockquote class="clinician-card__quote">“{clinician.quote}”</blockquote>}
 							</div>
 						</article>
 					))
