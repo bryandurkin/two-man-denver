@@ -52,4 +52,27 @@ export const clinicians: Clinician[] = [
 			"NCAA Division I & II: assignments in the ACC, American Conference, and FCU.",
 		],
 	},
+	{
+		name: "Craig Mirr",
+		roles: [
+			"Current NCAA Division I Umpire — 4 staffs",
+			"Former ACC Staff",
+			"1991 Wendelstedt School graduate",
+		],
+		image: "/images/craig-mirr-portrait.webp",
+		imageAlt: "Portrait of Craig Mirr wearing a pink collared shirt",
+		overview:
+			"With 36 years of umpiring experience, Craig has worked four NAIA World Series, multiple Division I conference tournaments, and multiple GHSA State Championships. He brings his knowledge of two-man mechanics, positioning, and game management to the December camp in Panama City Beach.",
+		experience: [
+			{ value: "36", label: "Years of umpiring" },
+			{ value: "4", label: "NAIA World Series" },
+			{ value: "4", label: "Current Division I staffs" },
+		],
+		details: [
+			"Former ACC staff member; currently works on four Division I staffs.",
+			"Multiple NCAA Division I conference tournament assignments and GHSA State Championships.",
+			"1991 graduate of the Wendelstedt School for Umpires.",
+		],
+	},
+
 ];
